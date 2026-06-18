@@ -16,6 +16,10 @@ Most LLM prompts for DBAs are generic. This repo is different:
 - **Structured knowledge base** covering Oracle 19c HA/DR from database layer down to storage/network/OS
 - **Mandatory reference system** — every AI response must cite the source document, chapter, and page
 - **Designed for Claude Projects** — upload your official Oracle PDFs alongside this knowledge base for a fully grounded assistant
+-  **Designed for Claude Projects** — upload your official Oracle PDFs directly into the project; no local download required
+
+> 💡 **No local PDF storage needed.** Claude Projects indexes uploaded PDFs on the server side. You can download PDFs from Oracle's documentation site and upload them directly to your Claude Project — Claude will search and cite them without you needing to keep local copies.
+
 
 ---
 
@@ -55,6 +59,8 @@ oracle19c-dba-ai-knowledge/
 2. Open `prompts/system-prompt.md` → copy the full content → paste into **Project Instructions**
 3. Upload `knowledge-base/oracle19c_ha_knowledge_base.md` as a project document
 4. Upload your Oracle 19c official PDFs (see [recommended-pdfs.md](docs/recommended-pdfs.md))
+
+> ℹ️ **You don't need to store the PDFs locally.** Once uploaded to your Claude Project, they are indexed and fully searchable by Claude. You can upload directly from your browser's download and immediately delete the local file if you wish.
 
 ### 2. Ask your first question
 
