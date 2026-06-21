@@ -1,144 +1,164 @@
-# 🗄️ Oracle 19c HA/DR — AI Knowledge Base & Prompt Framework
+# oracle-ai-groundtruth
 
-> A structured knowledge base and system prompt framework to turn Claude (or any LLM) into an expert Oracle 19c High Availability and Disaster Recovery assistant — grounded in official Oracle documentation.
+**La source de vérité pour l'IA Oracle.**
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
-[![Oracle 19c](https://img.shields.io/badge/Oracle-19c-red.svg)](https://docs.oracle.com/en/database/oracle/oracle-database/19/)
-[![Contributions Welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg)](CONTRIBUTING.md)
+Deux outils pour deux moments différents :
 
----
-
-## 🎯 What This Is
-
-Most LLM prompts for DBAs are generic. This repo is different:
-
-- **Expert-level system prompt** that instructs the AI to behave as a senior Oracle DBA/architect
-- **Structured knowledge base** covering Oracle 19c HA/DR from database layer down to storage/network/OS
-- **Mandatory reference system** — every AI response must cite the source document, chapter, and page
-- **Designed for Claude Projects** — upload your official Oracle PDFs alongside this knowledge base for a fully grounded assistant
--  **Designed for Claude Projects** — upload your official Oracle PDFs directly into the project; no local download required
-
-> 💡 **No local PDF storage needed.** Claude Projects indexes uploaded PDFs on the server side. You can download PDFs from Oracle's documentation site and upload them directly to your Claude Project — Claude will search and cite them without you needing to keep local copies.
-
+- **Avant d'utiliser un plugin IA Oracle** → auditez-le avec `AUDIT.md`
+- **Pendant que vous travaillez avec un LLM sur Oracle** → guidez-le avec `SKILL.md`
 
 ---
 
-## 📦 Contents
+## Pourquoi ce repo existe
 
-```
-oracle19c-dba-ai-knowledge/
-├── README.md                          ← You are here
-├── LICENSE                            ← MIT
-├── CONTRIBUTING.md                    ← How to contribute
-├── CHANGELOG.md                       ← Version history
-│
-├── prompts/
-│   └── system-prompt.md               ← The system prompt to paste into your AI project
-│
-├── knowledge-base/
-│   └── oracle19c_ha_knowledge_base.md ← Full technical knowledge base (3000+ lines)
-│
-├── examples/
-│   ├── switchover-example.md          ← Example Q&A: RAC+DG switchover procedure
-│   ├── asm-troubleshooting-example.md ← Example Q&A: ASM disk group recovery
-│   └── ib-interconnect-example.md     ← Example Q&A: InfiniBand tuning for RAC
-│
-└── docs/
-    ├── getting-started.md             ← How to set up your Claude Project
-    ├── recommended-pdfs.md            ← Which Oracle PDFs to add to the project
-    └── architecture.md                ← How the knowledge base is structured
-```
+Les LLMs sont utiles pour travailler sur Oracle. Mais ils ont deux défauts majeurs en environnement critique.
+
+**Ils hallucinent.** Une réponse fluide et crédible n'est pas une réponse correcte. Sur un environnement RAC + Data Guard, une recommandation inventée n'est pas un détail — c'est un risque opérationnel.
+
+**Ils appliquent littéralement.** Un template conçu pour guider un développeur humain contient du jugement implicite. L'humain lit, comprend, adapte. Le LLM applique — à l'échelle, sur votre base de production, sans les questions qu'un expert aurait posées.
+
+Ce repo répond aux deux problèmes.
 
 ---
 
-## 🚀 Quick Start
+## Les deux outils
 
-### 1. Set up your Claude Project
+### `SKILL.md` — Guidance documentaire Oracle
 
-1. Go to [claude.ai](https://claude.ai) → **Projects** → **New Project**
-2. Open `prompts/system-prompt.md` → copy the full content → paste into **Project Instructions**
-3. Upload `knowledge-base/oracle19c_ha_knowledge_base.md` as a project document
-4. Upload your Oracle 19c official PDFs (see [recommended-pdfs.md](docs/recommended-pdfs.md))
+Un system prompt expert Oracle 19c HA/DR qui impose des références obligatoires sur chaque réponse.
 
-> ℹ️ **You don't need to store the PDFs locally.** Once uploaded to your Claude Project, they are indexed and fully searchable by Claude. You can upload directly from your browser's download and immediately delete the local file if you wish.
+Toute réponse doit citer :
+- le document Oracle officiel exact
+- le chapitre
+- la page
+- une citation vérifiable
 
-### 2. Ask your first question
+Sinon, ce n'est pas une réponse fiable. C'est une hypothèse bien formulée.
 
-```
-How do I perform a Data Guard switchover on a RAC+DG environment?
-```
+**Périmètre couvert :**
+Grid Infrastructure · RAC · Data Guard · GoldenGate · ASM · APEX · ORDS · SQLcl · OCI · Sécurité Oracle
 
-Every response will end with a mandatory `📚 References` block citing the exact PDF, chapter, and page used.
-
----
-
-## 🧠 Knowledge Base Coverage
-
-| Domain | Coverage |
-|--------|----------|
-| Oracle Clusterware / Grid Infrastructure 19c | ✅ Full |
-| Oracle ASM 19c | ✅ Full |
-| Oracle RAC 19c (Cache Fusion, Services, TAF, AC) | ✅ Full |
-| Oracle Data Guard 19c (Physical, Logical, ADG, Broker) | ✅ Full |
-| RAC + Data Guard combined (Far Sync, cascaded) | ✅ Full |
-| Oracle GoldenGate 19c (Classic + Microservices) | ✅ Full |
-| OS: RHEL / Oracle Linux 7/8/9 | ✅ Full |
-| OS: Windows Server | ✅ Partial |
-| Network: Ethernet bonding/LACP, VLAN, QoS | ✅ Full |
-| Network: InfiniBand / RDMA / RoCE | ✅ Full |
-| Storage: FC SAN + Multipath | ✅ Full |
-| Storage: iSCSI | ✅ Full |
-| Storage: NVMe-oF (RDMA, TCP) | ✅ Full |
-| Operational checklists (health check, patching, RMAN) | ✅ Full |
-| Troubleshooting (CRS, ASM, RAC, DG, GoldenGate) | ✅ Full |
+**Usage :** chargez `SKILL.md` dans votre projet Claude, ChatGPT, ou tout autre LLM comme system prompt ou fichier de contexte.
 
 ---
 
-## 💡 How the Reference System Works
+### `AUDIT.md` — Prompt d'audit de sécurité IA
 
-Every AI response is structured as follows:
+Un prompt d'audit offensif et défensif pour analyser n'importe quel repo de plugins IA Oracle avant de l'installer ou de l'utiliser comme base de génération.
 
+Ce prompt identifie en une passe :
+- les vulnérabilités d'exécution de code sans sandbox
+- les angles morts entre domaines (ex : isolation compte CI/CD vs compte agent)
+- les règles documentées mais non enforced techniquement
+- les vecteurs de supply chain
+- les fichiers `.md` utilisés comme instructions d'agents
+- les mécanismes d'installation sans vérification d'intégrité
+
+**Ce prompt a été utilisé pour auditer `oracle/skills`** — le repo officiel Oracle de plugins IA pour Claude Code. Le rapport complet est disponible dans `examples/oracle-skills-audit.md`.
+
+**Usage :** chargez `AUDIT.md` dans Claude et fournissez le repo à auditer.
+
+---
+
+## Démonstration concrète
+
+J'ai testé `oracle/skills` avec ce prompt d'audit. En partant de zéro — compte OCI gratuit, Claude Code installé — voici ce que j'ai observé en 3 minutes 47 secondes de génération :
+
+**Installation sans intégrité**
 ```
-The MAXIMUM AVAILABILITY protection mode requires synchronous redo transport [1].
-Standby Redo Logs must be sized identically to Online Redo Logs [2].
-The FAL_SERVER parameter enables automatic gap resolution [KB].
+Review skills before use; they run with full agent permissions.
+```
+Aucun hash. Aucune signature. Aucune vérification de ce qui vient d'être téléchargé.
 
-📚 References
-┌──────────────────────────────────────────────────────────────────────┐
-│ [1]  Oracle Data Guard Concepts 19c — Chapter 6                      │
-│      "Redo Transport Services" — p. 6-4                              │
-│ [2]  Oracle Data Guard Concepts 19c — Chapter 7                      │
-│      "Standby Redo Log" — p. 7-2                                     │
-│ [KB] Knowledge Base oracle19c_ha — Part 3.2 (DG Parameters)         │
-└──────────────────────────────────────────────────────────────────────┘
+**Un seul compte Oracle pour pipeline CI/CD et agent APEX**
+```yaml
+DB_USERNAME: ${{ secrets.DB_USERNAME }}
+DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+DB_CONNECTION: ${{ secrets.DB_CONNECTION }}
+```
+Le même compte déploie le schéma DDL et exécute du PL/SQL via le chatbot. Sans avertissement.
+
+**Outil d'exécution PL/SQL sans RBAC ni sandbox**
+```
+tool update-order (
+    type: executeServersideCode
+    settings {
+        language: plsql
+        plsqlCode: orders_mgmt.update_order(...)
+    }
+)
+```
+Pas d'`authorizationScheme`. Pas de validation humaine. Pas de restriction sur le périmètre d'exécution.
+
+Ce n'est pas un reproche à Oracle. Le corpus recommande correctement le least privilege — par domaine. Ce qui manque, c'est la règle transversale qui dit que le compte du pipeline et le compte de l'agent ne doivent pas être le même. Cette règle n'existe nulle part dans le corpus. Et quand un LLM assemble les templates, personne ne la pose à sa place.
+
+> Un template conçu pour guider un humain devient une instruction exécutée par une machine. La différence entre les deux, c'est le jugement. Et le jugement ne se documente pas dans un fichier `.md`.
+
+---
+
+## Installation
+
+### SKILL.md — Guidance documentaire
+
+**Option 1 — Claude Projects**
+Copiez le contenu de `SKILL.md` dans les instructions de votre projet Claude.
+
+**Option 2 — Claude Code**
+```bash
+npx skills add [votre-username]/oracle-ai-groundtruth
 ```
 
-If no project document covers the topic, the AI explicitly warns:
-> ⚠️ No project document covers this point. Response based on general Oracle 19c knowledge.
+**Option 3 — Tout autre LLM**
+Copiez le contenu de `SKILL.md` comme system prompt.
+
+### AUDIT.md — Prompt d'audit
+
+Copiez le contenu de `AUDIT.md` dans les instructions d'un projet Claude dédié à l'audit, puis fournissez le repo à analyser.
 
 ---
 
-## 🤝 Contributing
+## Structure du repo
 
-Contributions are welcome — see [CONTRIBUTING.md](CONTRIBUTING.md).
-
-Areas where help is most needed:
-- Additional troubleshooting scenarios
-- GoldenGate Microservices coverage
-- Oracle 21c / 23c differences
-- CDB/PDB specifics in HA context
-- Exadata-specific sections
-
----
-
-## 📄 License
-
-MIT — see [LICENSE](LICENSE).
+```
+oracle-ai-groundtruth/
+├── README.md                       ← ce fichier
+├── SKILL.md                        ← guidance documentaire Oracle
+├── AUDIT.md                        ← prompt d'audit de sécurité IA
+└── examples/
+    └── oracle-skills-audit.md      ← rapport d'audit oracle/skills
+```
 
 ---
 
-## ⚠️ Disclaimer
+## Principes
 
-This knowledge base is provided for educational and operational assistance purposes.
-Always validate procedures in a test environment before applying to production.
-Oracle official documentation always takes precedence.
+**Toute réponse doit être traçable.** Pas juste "la doc Oracle". Le document exact, le chapitre, la page, la citation vérifiable.
+
+**Les bonnes pratiques documentées ne sont pas des protections.** Un finding de sécurité peut exister même si le repo recommande la bonne pratique — si elle n'est pas enforced techniquement.
+
+**Un LLM applique littéralement.** Ne jamais supposer qu'il fera preuve du même jugement qu'un expert humain qui lirait et adapterait.
+
+---
+
+## Sources de référence
+
+| Source | URL |
+|--------|-----|
+| OWASP GenAI Security | https://genai.owasp.org |
+| MITRE ATLAS | https://atlas.mitre.org |
+| NIST AI RMF | https://www.nist.gov/itl/ai-risk-management-framework |
+| CISA AI | https://www.cisa.gov/ai |
+| ANSSI IA | https://cyber.gouv.fr/enjeux-technologiques/intelligence-artificielle/ |
+| ENISA Threat Landscape | https://www.enisa.europa.eu/topics/cyber-threats/enisa-threat-landscape |
+| CERT-FR | https://www.cert.ssi.gouv.fr |
+| BSI IA | https://www.bsi.bund.de |
+
+---
+
+## Licence
+
+MIT — libre d'utilisation, de modification, et de distribution.
+
+---
+
+*oracle-ai-groundtruth est un projet indépendant, non affilié à Oracle Corporation.*
