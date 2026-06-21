@@ -113,7 +113,7 @@ Copiez le contenu de `SKILL.md` comme system prompt.
 
 ### AUDIT.md — Prompt d'audit
 
-Copiez le contenu de `AUDIT.md` dans les instructions d'un projet Claude dédié à l'audit, puis fournissez le repo à analyser.
+Copiez le contenu de `prompts/AUDIT.md` dans les instructions d'un projet Claude dédié à l'audit, puis fournissez le repo à analyser.
 
 ---
 
@@ -123,7 +123,9 @@ Copiez le contenu de `AUDIT.md` dans les instructions d'un projet Claude dédié
 oracle-ai-groundtruth/
 ├── README.md                       ← ce fichier
 ├── SKILL.md                        ← guidance documentaire Oracle
-├── AUDIT.md                        ← prompt d'audit de sécurité IA
+├── prompts/
+│   └── AUDIT.md                    ← prompt d'audit de sécurité IA
+│   └── ...                         ← futurs prompts
 └── examples/
     └── oracle-skills-audit.md      ← rapport d'audit oracle/skills
 ```
