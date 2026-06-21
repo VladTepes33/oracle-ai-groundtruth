@@ -155,7 +155,7 @@ oracle-ai-groundtruth/
 | CERT-FR | https://www.cert.ssi.gouv.fr |
 | BSI IA | https://www.bsi.bund.de |
 |Snyk Security Research | https://security.snyk.io |
-| US6 | GitHub Security Advisories | https://github.com/advisories |
+| GitHub Security Advisories | https://github.com/advisories |
 
 
 ---
