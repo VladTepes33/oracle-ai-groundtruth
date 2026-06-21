@@ -154,6 +154,9 @@ oracle-ai-groundtruth/
 | ENISA Threat Landscape | https://www.enisa.europa.eu/topics/cyber-threats/enisa-threat-landscape |
 | CERT-FR | https://www.cert.ssi.gouv.fr |
 | BSI IA | https://www.bsi.bund.de |
+|Snyk Security Research | https://security.snyk.io |
+| US6 | GitHub Security Advisories | https://github.com/advisories |
+
 
 ---
 
